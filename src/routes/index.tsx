@@ -133,7 +133,7 @@ function DeliverablesPage() {
       </section>
 
       {/* Results */}
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section id="results" className="mx-auto max-w-7xl px-6 py-10">
         {filtered.length === 0 ? (
           <div className="rounded-2xl border border-border bg-surface/40 p-12 text-center">
             <p className="text-foreground/90">No deliverables match your filters.</p>
