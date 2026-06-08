@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowUpRight, Download, FileText, Filter, Search, X } from "lucide-react";
-import { DELIVERABLES, DELIVERABLE_TYPES, PROJECTS, getProject, getType } from "@/lib/deliverables";
+import { getDeliverablesConfig } from "@/lib/api/deliverables.functions";
 
 export const Route = createFileRoute("/")({
+  loader: () => getDeliverablesConfig(),
   head: () => ({
     meta: [
       { title: "APEx Deliverables Library — Earth Observation Project Documents" },
@@ -24,23 +25,30 @@ export const Route = createFileRoute("/")({
 });
 
 function DeliverablesPage() {
+  const data = Route.useLoaderData();
+  const deliverables = data.deliverables;
+  const deliverableTypes = data.deliverableTypes;
+  const projects = data.projects;
+
   const [query, setQuery] = useState("");
   const [type, setType] = useState<string | "all">("all");
   const [projectId, setProjectId] = useState<string | "all">("all");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return DELIVERABLES.filter((d) => {
-      if (type !== "all" && d.type !== type) return false;
-      if (projectId !== "all" && d.projectId !== projectId) return false;
-      if (!q) return true;
-      const proj = getProject(d.projectId);
-      const haystack = [d.title, d.code, d.abstract, proj?.acronym ?? "", proj?.name ?? ""]
-        .join(" ")
-        .toLowerCase();
-      return haystack.includes(q);
-    }).sort((a, b) => b.issuedOn.localeCompare(a.issuedOn));
-  }, [query, type, projectId]);
+    return deliverables
+      .filter((d) => {
+        if (type !== "all" && d.type !== type) return false;
+        if (projectId !== "all" && d.projectId !== projectId) return false;
+        if (!q) return true;
+        const proj = projects.find((p) => p.id === d.projectId);
+        const haystack = [d.title, d.code, d.abstract, proj?.acronym ?? "", proj?.name ?? ""]
+          .join(" ")
+          .toLowerCase();
+        return haystack.includes(q);
+      })
+      .sort((a, b) => b.issuedOn.localeCompare(a.issuedOn));
+  }, [deliverables, projects, query, type, projectId]);
 
   const activeFilters = (type !== "all" ? 1 : 0) + (projectId !== "all" ? 1 : 0);
 
@@ -52,17 +60,21 @@ function DeliverablesPage() {
 
   return (
     <div className="min-h-screen">
-      <Hero total={DELIVERABLES.length} />
+      <Hero
+        total={deliverables.length}
+        projectCount={projects.length}
+        typeCount={deliverableTypes.length}
+      />
 
       {/* Type quick chips */}
       <section className="mx-auto max-w-7xl px-6 pt-2">
         <div className="flex flex-wrap items-center gap-2">
           <button onClick={() => setType("all")} className={chipClass(type === "all")}>
             All types
-            <span className="ml-2 text-xs opacity-70">{DELIVERABLES.length}</span>
+            <span className="ml-2 text-xs opacity-70">{deliverables.length}</span>
           </button>
-          {DELIVERABLE_TYPES.map((t) => {
-            const count = DELIVERABLES.filter((d) => d.type === t.code).length;
+          {deliverableTypes.map((t) => {
+            const count = deliverables.filter((d) => d.type === t.code).length;
             return (
               <button
                 key={t.code}
@@ -98,7 +110,7 @@ function DeliverablesPage() {
               onChange={(v) => setProjectId(v as string)}
               options={[
                 { value: "all", label: "All projects" },
-                ...PROJECTS.map((p) => ({ value: p.id, label: p.acronym })),
+                ...projects.map((p) => ({ value: p.id, label: p.acronym })),
               ]}
             />
 
@@ -114,7 +126,7 @@ function DeliverablesPage() {
           <div className="mt-3 flex items-center justify-between text-xs text-background">
             <div className="inline-flex items-center gap-2">
               <Filter className="h-3.5 w-3.5" />
-              {filtered.length} of {DELIVERABLES.length} deliverables
+              {filtered.length} of {deliverables.length} deliverables
               {activeFilters > 0 && (
                 <span>
                   · {activeFilters} active filter{activeFilters > 1 ? "s" : ""}
@@ -140,8 +152,8 @@ function DeliverablesPage() {
         ) : (
           <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {filtered.map((d) => {
-              const proj = getProject(d.projectId)!;
-              const tMeta = getType(d.type)!;
+              const proj = projects.find((p) => p.id === d.projectId);
+              const tMeta = deliverableTypes.find((t) => t.code === d.type);
               return (
                 <li
                   key={d.id}
@@ -154,7 +166,7 @@ function DeliverablesPage() {
                       </span>
                       <div>
                         <div className="text-[11px] font-mono uppercase tracking-wider text-teal">
-                          {d.type} · {tMeta.name}
+                          {tMeta?.name ?? "Unknown type"}
                         </div>
                         <div className="font-mono text-[11px] text-background/70">{d.code}</div>
                       </div>
@@ -164,11 +176,13 @@ function DeliverablesPage() {
                   <h3 className="mt-4 text-lg font-bold! leading-snug text-background!">
                     {d.title}
                   </h3>
-                  <p className="mt-2 line-clamp-3 text-sm text-background/70">{d.abstract}</p>
+                  <p className="mt-2 h-18 line-clamp-3 text-sm text-background/70">{d.abstract}</p>
 
-                  <dl className="mt-4 grid grid-cols-2 gap-y-2 text-xs">
+                  <dl className="mt-2 flex-1 grid grid-cols-2 gap-y-2 text-xs">
                     <dt className="text-background/70">Project</dt>
-                    <dd className="text-right font-medium text-background">{proj.acronym}</dd>
+                    <dd className="text-right font-medium text-background">
+                      {proj?.acronym ?? "Unknown project"}
+                    </dd>
 
                     <dt className="text-background/70">Issued</dt>
                     <dd className="text-right text-background/90">
@@ -257,7 +271,15 @@ function Select({
   );
 }
 
-function Hero({ total }: { total: number }) {
+function Hero({
+  total,
+  projectCount,
+  typeCount,
+}: {
+  total: number;
+  projectCount: number;
+  typeCount: number;
+}) {
   return (
     <section className="relative overflow-hidden">
       <div className="bg-grid-faint absolute inset-0 opacity-60" aria-hidden />
@@ -270,8 +292,22 @@ function Hero({ total }: { total: number }) {
             Browse {total} document deliverables produced by ESA Earth Observation projects,
             filterable by type, project and status.
           </p>
+          <dl className="mt-10 grid max-w-xl grid-cols-3 gap-6">
+            <Stat label="Deliverables" value={total.toString()} />
+            <Stat label="Projects" value={projectCount.toString()} />
+            <Stat label="Document types" value={typeCount.toString()} />
+          </dl>
         </div>
       </div>
     </section>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div className="text-3xl font-normal text-teal">{value}</div>
+      <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
+    </div>
   );
 }
