@@ -35,14 +35,7 @@ function DeliverablesPage() {
       if (projectId !== "all" && d.projectId !== projectId) return false;
       if (!q) return true;
       const proj = getProject(d.projectId);
-      const haystack = [
-        d.title,
-        d.code,
-        d.abstract,
-        d.authors.join(" "),
-        proj?.acronym ?? "",
-        proj?.name ?? "",
-      ]
+      const haystack = [d.title, d.code, d.abstract, proj?.acronym ?? "", proj?.name ?? ""]
         .join(" ")
         .toLowerCase();
       return haystack.includes(q);
@@ -188,14 +181,6 @@ function DeliverablesPage() {
 
                     <dt className="text-background/70">Version</dt>
                     <dd className="text-right text-background/90">v{d.version}</dd>
-
-                    <dt className="text-background/70">Authors</dt>
-                    <dd
-                      className="truncate text-right text-background/90"
-                      title={d.authors.join(", ")}
-                    >
-                      {d.authors.join(", ")}
-                    </dd>
                   </dl>
 
                   <div className="mt-5 flex items-center justify-between border-t border-border pt-4">

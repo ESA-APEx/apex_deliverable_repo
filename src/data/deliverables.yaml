@@ -2,9 +2,6 @@ deliverableTypes:
   - code: PM
     name: Project Management Plan
     description: Schedule, organisation, risk register and reporting framework.
-  - code: TN
-    name: Technical Note
-    description: Focused technical analyses and trade-off studies.
   - code: OTHER
     name: Other
     description: Deliverables that do not fit other categories, e.g. datasets or software releases
@@ -24,5 +21,4 @@ deliverables:
     version: 5.1
     issuedOn: 2025-02-14
     downloadUrl: https://vitoresearch.sharepoint.com/:w:/r/sites/22114-application-propagati-Consortium/Shared%20Documents/Consortium/Milestones/20260603_SOR_FR/APEx_D01_PMP_Project%20Management%20Plan_5.1.docx
-    authors: ["Bram Janssen"]
     abstract: Governance, milestones and risk management framework for the APEx activity.

@@ -26,7 +26,6 @@ export interface Deliverable {
   version: string;
   issuedOn: string; // ISO date
   downloadUrl: string;
-  authors: string[];
   abstract: string;
 }
 
