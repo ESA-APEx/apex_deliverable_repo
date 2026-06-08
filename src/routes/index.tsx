@@ -88,15 +88,15 @@ function DeliverablesPage() {
 
       {/* Filters bar */}
       <section className="mx-auto max-w-7xl px-6 pt-8">
-        <div className="rounded-2xl border border-border bg-surface/60 backdrop-blur-sm p-4 md:p-5">
+        <div className="rounded-2xl border border-border bg-foreground/90 backdrop-blur-sm p-4 md:p-5">
           <div className="grid gap-3 md:grid-cols-[1.4fr_1fr_auto]">
             <label className="relative flex items-center">
-              <Search className="absolute left-3 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 h-4 w-4 text-background" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search title, code, author, abstract…"
-                className="w-full rounded-full border border-border bg-background/60 py-2.5 pl-10 pr-4 text-sm outline-none ring-teal/0 focus:border-teal/60 focus:ring-2 focus:ring-teal/30"
+                className="w-full rounded-full border border-border bg-foreground text-background py-2.5 pl-10 pr-4 text-sm outline-none ring-teal/0 focus:border-teal/60 focus:ring-2 focus:ring-teal/30"
               />
             </label>
 
@@ -112,13 +112,13 @@ function DeliverablesPage() {
             <button
               onClick={clearAll}
               disabled={!query && activeFilters === 0}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background/40 px-4 py-2.5 text-sm text-foreground/90 transition hover:border-teal/50 hover:text-teal disabled:opacity-40"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background px-4 py-2.5 text-sm text-foreground/90 transition hover:border-teal/50 hover:text-teal disabled:opacity-40"
             >
               <X className="h-4 w-4" /> Clear
             </button>
           </div>
 
-          <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+          <div className="mt-3 flex items-center justify-between text-xs text-background">
             <div className="inline-flex items-center gap-2">
               <Filter className="h-3.5 w-3.5" />
               {filtered.length} of {DELIVERABLES.length} deliverables
@@ -135,11 +135,11 @@ function DeliverablesPage() {
       {/* Results */}
       <section id="results" className="mx-auto max-w-7xl px-6 py-10">
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-border bg-surface/40 p-12 text-center">
-            <p className="text-foreground/90">No deliverables match your filters.</p>
+          <div className="rounded-2xl border border-border bg-foreground/95 p-12 text-center">
+            <p className="text-background">No deliverables match your filters.</p>
             <button
               onClick={clearAll}
-              className="mt-4 inline-flex items-center gap-2 rounded-full bg-teal px-5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-teal px-5 py-2 text-sm font-medium text-foreground hover:opacity-90"
             >
               Reset filters
             </button>
@@ -152,7 +152,7 @@ function DeliverablesPage() {
               return (
                 <li
                   key={d.id}
-                  className="group relative flex flex-col rounded-2xl border border-border bg-surface/70 p-5 transition hover:border-teal/50 hover:bg-surface"
+                  className="group relative flex flex-col rounded-2xl border border-border bg-foreground/95 p-5 transition hover:border-teal/50 hover:bg-foreground"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2">
@@ -163,22 +163,22 @@ function DeliverablesPage() {
                         <div className="text-[11px] font-mono uppercase tracking-wider text-teal">
                           {d.type} · {tMeta.name}
                         </div>
-                        <div className="font-mono text-[11px] text-muted-foreground">{d.code}</div>
+                        <div className="font-mono text-[11px] text-background/70">{d.code}</div>
                       </div>
                     </div>
                   </div>
 
-                  <h3 className="mt-4 text-lg font-normal leading-snug text-foreground">
+                  <h3 className="mt-4 text-lg font-bold! leading-snug text-background!">
                     {d.title}
                   </h3>
-                  <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{d.abstract}</p>
+                  <p className="mt-2 line-clamp-3 text-sm text-background/70">{d.abstract}</p>
 
                   <dl className="mt-4 grid grid-cols-2 gap-y-2 text-xs">
-                    <dt className="text-muted-foreground">Project</dt>
-                    <dd className="text-right font-medium text-foreground">{proj.acronym}</dd>
+                    <dt className="text-background/70">Project</dt>
+                    <dd className="text-right font-medium text-background">{proj.acronym}</dd>
 
-                    <dt className="text-muted-foreground">Issued</dt>
-                    <dd className="text-right text-foreground/90">
+                    <dt className="text-background/70">Issued</dt>
+                    <dd className="text-right text-background/90">
                       {new Date(d.issuedOn).toLocaleDateString("en-GB", {
                         day: "2-digit",
                         month: "short",
@@ -186,12 +186,12 @@ function DeliverablesPage() {
                       })}
                     </dd>
 
-                    <dt className="text-muted-foreground">Version</dt>
-                    <dd className="text-right text-foreground/90">v{d.version}</dd>
+                    <dt className="text-background/70">Version</dt>
+                    <dd className="text-right text-background/90">v{d.version}</dd>
 
-                    <dt className="text-muted-foreground">Authors</dt>
+                    <dt className="text-background/70">Authors</dt>
                     <dd
-                      className="truncate text-right text-foreground/90"
+                      className="truncate text-right text-background/90"
                       title={d.authors.join(", ")}
                     >
                       {d.authors.join(", ")}
@@ -202,9 +202,12 @@ function DeliverablesPage() {
                     <button
                       type="button"
                       onClick={() => window.open(d.downloadUrl, "_blank", "noopener,noreferrer")}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-teal px-3.5 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-teal px-3.5 py-1.5 text-xs font-medium text-foreground transition hover:opacity-90"
                     >
-                      <Download className="h-3.5 w-3.5" /> <span className="text-sm">{getDownloadLabel(d.downloadUrl)}</span>
+                      <Download className="h-3.5 w-3.5" />{" "}
+                      <span className="text-sm text-foreground">
+                        {getDownloadLabel(d.downloadUrl)}
+                      </span>
                     </button>
                   </div>
                 </li>
@@ -248,16 +251,16 @@ function Select({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full appearance-none rounded-full border border-border bg-background/60 py-2.5 pl-4 pr-9 text-sm outline-none focus:border-teal/60 focus:ring-2 focus:ring-teal/30"
+        className="w-full appearance-none rounded-full border border-border bg-foreground text-background py-2.5 pl-4 pr-9 text-sm outline-none focus:border-teal/60 focus:ring-2 focus:ring-teal/30"
       >
         {options.map((o) => (
-          <option key={o.value} value={o.value} className="bg-background text-foreground">
+          <option key={o.value} value={o.value} className="text-background bg-foreground">
             {o.label}
           </option>
         ))}
       </select>
       <svg
-        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-background"
         viewBox="0 0 20 20"
         fill="none"
         stroke="currentColor"
@@ -273,31 +276,17 @@ function Hero({ total }: { total: number }) {
   return (
     <section className="relative overflow-hidden">
       <div className="bg-grid-faint absolute inset-0 opacity-60" aria-hidden />
-      <div className="relative mx-auto max-w-7xl px-6 py-20 md:py-28">
+      <div className="relative mx-auto max-w-7xl px-6 pt-10 md:pt-18">
         <div className="max-w-3xl">
-          <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
+          <h1 className="mt-6 text-4xl font-bold! leading-tight tracking-tight md:text-6xl">
             APEx Document Repository
           </h1>
-          <p className="my-5 max-w-2xl text-base text-foreground/80 md:text-lg">
+          <p className="my-5 max-w-2xl text-base text-foreground/80">
             Browse {total} document deliverables produced by ESA Earth Observation projects,
             filterable by type, project and status.
           </p>
-          <dl className="mt-12 grid max-w-xl grid-cols-3 gap-6">
-            <Stat label="Deliverables" value={total.toString()} />
-            <Stat label="Projects" value={PROJECTS.length.toString()} />
-            <Stat label="Document types" value={DELIVERABLE_TYPES.length.toString()} />
-          </dl>
         </div>
       </div>
     </section>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <div className="text-3xl font-normal text-teal">{value}</div>
-      <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
-    </div>
   );
 }
