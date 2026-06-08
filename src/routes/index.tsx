@@ -43,13 +43,13 @@ const STATUSES: DeliverableStatus[] = ["Draft", "Issued", "Accepted", "Supersede
 function statusClasses(status: DeliverableStatus) {
   switch (status) {
     case "Accepted":
-      return "bg-teal/15 text-teal border-teal/30";
+      return "bg-teal/10 text-teal border-teal/30";
     case "Issued":
-      return "bg-white/8 text-foreground border-white/15";
+      return "bg-slate-100 text-slate-700 border-slate-200";
     case "Draft":
-      return "bg-amber-400/10 text-amber-300 border-amber-400/30";
+      return "bg-amber-50 text-amber-700 border-amber-200";
     case "Superseded":
-      return "bg-white/5 text-muted-foreground border-white/10";
+      return "bg-slate-50 text-slate-400 border-slate-200";
   }
 }
 
@@ -181,7 +181,7 @@ function DeliverablesPage() {
       {/* Results */}
       <section className="mx-auto max-w-7xl px-6 py-10">
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-border bg-surface/40 p-12 text-center">
+          <div className="rounded-2xl border border-border bg-surface/60 backdrop-blur-sm p-12 text-center">
             <p className="text-foreground/90">No deliverables match your filters.</p>
             <button
               onClick={clearAll}
@@ -198,7 +198,7 @@ function DeliverablesPage() {
               return (
                 <li
                   key={d.id}
-                  className="group relative flex flex-col rounded-2xl border border-border bg-surface/70 p-5 transition hover:border-teal/50 hover:bg-surface"
+                  className="group relative flex flex-col rounded-2xl border border-border bg-surface/70 p-5 transition hover:border-teal/40 hover:bg-white hover:shadow-sm"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2">
@@ -313,8 +313,8 @@ function Select({
 
 function Header() {
   return (
-    <header className="border-b border-teal/40">
-      <div className="border-b border-white/5">
+    <header className="border-b border-teal/30 bg-white">
+      <div className="border-b border-slate-100">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           <a href="https://www.esa.int" className="hover:text-teal" target="_blank" rel="noreferrer">
             → The European Space Agency
@@ -401,7 +401,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 function Footer() {
   return (
-    <footer className="border-t border-white/10 bg-background">
+    <footer className="border-t border-slate-200 bg-white">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-10 md:flex-row md:items-center md:justify-between">
         <div className="flex items-baseline gap-3">
           <span className="text-lg font-semibold">AP<span className="text-teal">Ex</span></span>
