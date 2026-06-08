@@ -1,0 +1,342 @@
+deliverableTypes:
+  - code: PM
+    name: Project Management Plan
+    description: Schedule, organisation, risk register and reporting framework.
+  - code: TN
+    name: Technical Note
+    description: Focused technical analyses and trade-off studies.
+  - code: RB
+    name: Requirements Baseline
+    description: User, system and product requirements with traceability matrix.
+  - code: ADD
+    name: Architectural Design
+    description: System decomposition, interfaces and deployment view.
+  - code: DDD
+    name: Detailed Design
+    description: Component-level design, data models and processing chains.
+  - code: ATBD
+    name: Algorithm Theoretical Baseline
+    description: Scientific basis and mathematical formulation of EO algorithms.
+  - code: PVR
+    name: Product Validation Report
+    description: Validation methodology, reference datasets and quality metrics.
+  - code: DPM
+    name: Data Processing Manual
+    description: Operational procedures for the cloud-based processing service.
+  - code: FR
+    name: Final Report
+    description: Project outcomes, lessons learned and exploitation roadmap.
+
+projects:
+  - id: agri-flux
+    acronym: AGRI-FLUX
+    name: High-Resolution Crop Evapotranspiration Service
+    domain: Agriculture
+    lead: VITO
+  - id: openeo-platform
+    acronym: openEO Platform
+    name: Federated Cloud Processing for Earth Observation
+    domain: Platform
+    lead: EODC
+  - id: biomass-cci
+    acronym: BIOMASS-CCI+
+    name: Above-Ground Biomass Climate Data Record
+    domain: Forestry & Carbon
+    lead: CESBIO
+  - id: polar-monitor
+    acronym: POLAR-MONITOR
+    name: Arctic Sea-Ice Drift and Thickness Monitoring
+    domain: Cryosphere
+    lead: DTU Space
+  - id: urban-heat
+    acronym: URBAN-HEAT
+    name: City-Scale Surface Temperature Mapping
+    domain: Urban
+    lead: DLR
+  - id: water-quality
+    acronym: AQUA-WATCH
+    name: Inland & Coastal Water Quality Indicators
+    domain: Water
+    lead: Brockmann Consult
+  - id: methane-plume
+    acronym: METHANE-PLUME
+    name: Point-Source Methane Emission Detection
+    domain: Atmosphere
+    lead: SRON
+
+deliverables:
+  - id: d1
+    code: APEX-AGRI-FLUX-PM-001
+    title: Project Management Plan
+    type: PM
+    projectId: agri-flux
+    version: "2.1"
+    issuedOn: 2025-02-14
+    status: Accepted
+    pages: 48
+    authors: [J. Vermeer, S. Andersen]
+    abstract: Governance, milestones and risk management framework for the AGRI-FLUX activity.
+  - id: d2
+    code: APEX-AGRI-FLUX-RB-001
+    title: User & System Requirements
+    type: RB
+    projectId: agri-flux
+    version: "1.3"
+    issuedOn: 2025-03-20
+    status: Accepted
+    pages: 92
+    authors: [M. López, T. Nakamura]
+    abstract: Consolidated user requirements from precision-agriculture stakeholders and the resulting system baseline.
+  - id: d3
+    code: APEX-AGRI-FLUX-ATBD-001
+    title: Two-Source Energy Balance ATBD
+    type: ATBD
+    projectId: agri-flux
+    version: "1.0"
+    issuedOn: 2025-05-08
+    status: Issued
+    pages: 134
+    authors: [C. Rinaldi]
+    abstract: Theoretical basis for the TSEB retrieval chain producing 20 m daily evapotranspiration.
+  - id: d4
+    code: APEX-AGRI-FLUX-PVR-001
+    title: Validation against EC Flux Towers
+    type: PVR
+    projectId: agri-flux
+    version: "1.0"
+    issuedOn: 2026-01-12
+    status: Issued
+    pages: 76
+    authors: [C. Rinaldi, P. Singh]
+    abstract: Validation across 24 eddy-covariance sites with RMSE and bias statistics per biome.
+  - id: d5
+    code: APEX-OEO-ADD-002
+    title: Federated Backend Architecture
+    type: ADD
+    projectId: openeo-platform
+    version: "3.0"
+    issuedOn: 2025-06-30
+    status: Accepted
+    pages: 110
+    authors: [A. Müller, L. De Smet]
+    abstract: Architecture for the federated openEO backend across CDSE, EODC and Terrascope.
+  - id: d6
+    code: APEX-OEO-DDD-002
+    title: Job Orchestration Detailed Design
+    type: DDD
+    projectId: openeo-platform
+    version: "2.4"
+    issuedOn: 2025-08-22
+    status: Accepted
+    pages: 88
+    authors: [L. De Smet]
+    abstract: Detailed design of the job tracker, billing hooks and result staging components.
+  - id: d7
+    code: APEX-OEO-DPM-001
+    title: Operator's Data Processing Manual
+    type: DPM
+    projectId: openeo-platform
+    version: "1.5"
+    issuedOn: 2025-11-04
+    status: Issued
+    pages: 64
+    authors: [A. Müller]
+    abstract: Operational runbook for backend operators, including incident playbooks.
+  - id: d8
+    code: APEX-OEO-TN-007
+    title: On-Demand STAC Catalog Performance
+    type: TN
+    projectId: openeo-platform
+    version: "1.0"
+    issuedOn: 2026-02-28
+    status: Issued
+    pages: 22
+    authors: [R. Bauer]
+    abstract: Benchmark of STAC query latency under federated load patterns.
+  - id: d9
+    code: APEX-BIOM-RB-001
+    title: Climate Data Record Requirements
+    type: RB
+    projectId: biomass-cci
+    version: "1.0"
+    issuedOn: 2024-12-15
+    status: Accepted
+    pages: 71
+    authors: [E. Mougin]
+    abstract: GCOS-aligned requirements for the AGB CDR including stability and uncertainty targets.
+  - id: d10
+    code: APEX-BIOM-ATBD-001
+    title: Multi-Sensor Biomass ATBD
+    type: ATBD
+    projectId: biomass-cci
+    version: "2.0"
+    issuedOn: 2025-04-18
+    status: Accepted
+    pages: 158
+    authors: [E. Mougin, K. Scipal]
+    abstract: Combined SAR/LiDAR retrieval producing global 100 m AGB maps.
+  - id: d11
+    code: APEX-BIOM-PVR-002
+    title: Validation Report v2
+    type: PVR
+    projectId: biomass-cci
+    version: "2.0"
+    issuedOn: 2025-12-09
+    status: Issued
+    pages: 102
+    authors: [K. Scipal]
+    abstract: Validation against GEDI L4A and national forest inventories in 12 countries.
+  - id: d12
+    code: APEX-BIOM-FR-001
+    title: Final Report — Phase 2
+    type: FR
+    projectId: biomass-cci
+    version: "1.0"
+    issuedOn: 2026-04-02
+    status: Draft
+    pages: 58
+    authors: [E. Mougin]
+    abstract: Outcomes, exploitation pathways and recommendations for Phase 3.
+  - id: d13
+    code: APEX-POLAR-PM-001
+    title: Project Management Plan
+    type: PM
+    projectId: polar-monitor
+    version: "1.0"
+    issuedOn: 2025-09-01
+    status: Accepted
+    pages: 36
+    authors: [H. Skourup]
+    abstract: Schedule, WBS and risk register for the cryosphere monitoring service.
+  - id: d14
+    code: APEX-POLAR-ATBD-001
+    title: Sea-Ice Thickness ATBD
+    type: ATBD
+    projectId: polar-monitor
+    version: "1.0"
+    issuedOn: 2025-11-19
+    status: Issued
+    pages: 112
+    authors: [H. Skourup, R. Ricker]
+    abstract: CryoSat-2 / ICESat-2 fusion algorithm for pan-Arctic sea-ice thickness.
+  - id: d15
+    code: APEX-POLAR-TN-003
+    title: Snow-Loading Sensitivity Study
+    type: TN
+    projectId: polar-monitor
+    version: "1.0"
+    issuedOn: 2026-01-30
+    status: Issued
+    pages: 28
+    authors: [R. Ricker]
+    abstract: Impact of snow climatology choice on retrieved thickness fields.
+  - id: d16
+    code: APEX-URBAN-RB-001
+    title: Stakeholder Requirements
+    type: RB
+    projectId: urban-heat
+    version: "1.1"
+    issuedOn: 2025-07-11
+    status: Accepted
+    pages: 54
+    authors: [F. Schreier]
+    abstract: Requirements gathered from European city resilience offices.
+  - id: d17
+    code: APEX-URBAN-ADD-001
+    title: LST Service Architecture
+    type: ADD
+    projectId: urban-heat
+    version: "1.0"
+    issuedOn: 2025-10-02
+    status: Accepted
+    pages: 67
+    authors: [F. Schreier, Y. Bechtel]
+    abstract: Architecture for the 30 m hourly land surface temperature processing chain.
+  - id: d18
+    code: APEX-URBAN-DPM-001
+    title: Data Processing Manual
+    type: DPM
+    projectId: urban-heat
+    version: "1.0"
+    issuedOn: 2026-03-15
+    status: Draft
+    pages: 41
+    authors: [Y. Bechtel]
+    abstract: Operator manual covering ingestion, calibration and dissemination steps.
+  - id: d19
+    code: APEX-AQUA-ATBD-001
+    title: Inland Water Quality ATBD
+    type: ATBD
+    projectId: water-quality
+    version: "1.2"
+    issuedOn: 2025-05-29
+    status: Accepted
+    pages: 121
+    authors: [C. Brockmann]
+    abstract: Chl-a, turbidity and CDOM retrievals from Sentinel-2 and Sentinel-3 OLCI.
+  - id: d20
+    code: APEX-AQUA-DDD-001
+    title: Processor Detailed Design
+    type: DDD
+    projectId: water-quality
+    version: "1.0"
+    issuedOn: 2025-09-25
+    status: Issued
+    pages: 84
+    authors: [C. Brockmann, K. Stelzer]
+    abstract: SNAP-based processor packaged for cloud execution under openEO.
+  - id: d21
+    code: APEX-AQUA-PVR-001
+    title: Lakes Validation Report
+    type: PVR
+    projectId: water-quality
+    version: "1.0"
+    issuedOn: 2026-02-10
+    status: Issued
+    pages: 69
+    authors: [K. Stelzer]
+    abstract: Validation against AERONET-OC and in-situ campaigns on 18 European lakes.
+  - id: d22
+    code: APEX-CH4-RB-001
+    title: Methane Detection Requirements
+    type: RB
+    projectId: methane-plume
+    version: "1.0"
+    issuedOn: 2025-08-04
+    status: Accepted
+    pages: 47
+    authors: [I. Aben]
+    abstract: Detection-limit, latency and uncertainty requirements for point-source CH4.
+  - id: d23
+    code: APEX-CH4-ATBD-001
+    title: Plume Detection ATBD
+    type: ATBD
+    projectId: methane-plume
+    version: "1.0"
+    issuedOn: 2025-12-01
+    status: Issued
+    pages: 96
+    authors: [I. Aben, S. Houweling]
+    abstract: Matched-filter retrieval on Sentinel-5P and PRISMA with emission quantification.
+  - id: d24
+    code: APEX-CH4-TN-002
+    title: False-Positive Mitigation Study
+    type: TN
+    projectId: methane-plume
+    version: "1.0"
+    issuedOn: 2026-03-21
+    status: Draft
+    pages: 19
+    authors: [S. Houweling]
+    abstract: Strategies to suppress false-positive plumes over bright surfaces.
+  - id: d25
+    code: APEX-CH4-FR-001
+    title: Final Report
+    type: FR
+    projectId: methane-plume
+    version: "0.5"
+    issuedOn: 2026-05-10
+    status: Draft
+    pages: 33
+    authors: [I. Aben]
+    abstract: Preliminary outcomes and operational handover plan.
