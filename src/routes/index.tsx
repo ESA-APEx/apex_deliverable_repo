@@ -1,22 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import {
-  ArrowUpRight,
-  Download,
-  FileText,
-  Filter,
-  Search,
-  X,
-} from "lucide-react";
-import {
-  DELIVERABLES,
-  DELIVERABLE_TYPES,
-  PROJECTS,
-  getProject,
-  getType,
-  type DeliverableStatus,
-  type DeliverableType,
-} from "@/lib/deliverables";
+import { ArrowUpRight, Download, FileText, Filter, Search, X } from "lucide-react";
+import { DELIVERABLES, DELIVERABLE_TYPES, PROJECTS, getProject, getType } from "@/lib/deliverables";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,33 +23,16 @@ export const Route = createFileRoute("/")({
   component: DeliverablesPage,
 });
 
-const STATUSES: DeliverableStatus[] = ["Draft", "Issued", "Accepted", "Superseded"];
-
-function statusClasses(status: DeliverableStatus) {
-  switch (status) {
-    case "Accepted":
-      return "bg-teal/15 text-teal border-teal/30";
-    case "Issued":
-      return "bg-white/8 text-foreground border-white/15";
-    case "Draft":
-      return "bg-amber-400/10 text-amber-300 border-amber-400/30";
-    case "Superseded":
-      return "bg-white/5 text-muted-foreground border-white/10";
-  }
-}
-
 function DeliverablesPage() {
   const [query, setQuery] = useState("");
-  const [type, setType] = useState<DeliverableType | "all">("all");
+  const [type, setType] = useState<string | "all">("all");
   const [projectId, setProjectId] = useState<string | "all">("all");
-  const [status, setStatus] = useState<DeliverableStatus | "all">("all");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return DELIVERABLES.filter((d) => {
       if (type !== "all" && d.type !== type) return false;
       if (projectId !== "all" && d.projectId !== projectId) return false;
-      if (status !== "all" && d.status !== status) return false;
       if (!q) return true;
       const proj = getProject(d.projectId);
       const haystack = [
@@ -79,33 +47,24 @@ function DeliverablesPage() {
         .toLowerCase();
       return haystack.includes(q);
     }).sort((a, b) => b.issuedOn.localeCompare(a.issuedOn));
-  }, [query, type, projectId, status]);
+  }, [query, type, projectId]);
 
-  const activeFilters =
-    (type !== "all" ? 1 : 0) +
-    (projectId !== "all" ? 1 : 0) +
-    (status !== "all" ? 1 : 0);
+  const activeFilters = (type !== "all" ? 1 : 0) + (projectId !== "all" ? 1 : 0);
 
   const clearAll = () => {
     setQuery("");
     setType("all");
     setProjectId("all");
-    setStatus("all");
   };
 
   return (
     <div className="min-h-screen">
-      <Header />
-
       <Hero total={DELIVERABLES.length} />
 
       {/* Type quick chips */}
       <section className="mx-auto max-w-7xl px-6 pt-2">
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setType("all")}
-            className={chipClass(type === "all")}
-          >
+          <button onClick={() => setType("all")} className={chipClass(type === "all")}>
             All types
             <span className="ml-2 text-xs opacity-70">{DELIVERABLES.length}</span>
           </button>
@@ -130,7 +89,7 @@ function DeliverablesPage() {
       {/* Filters bar */}
       <section className="mx-auto max-w-7xl px-6 pt-8">
         <div className="rounded-2xl border border-border bg-surface/60 backdrop-blur-sm p-4 md:p-5">
-          <div className="grid gap-3 md:grid-cols-[1.4fr_1fr_1fr_auto]">
+          <div className="grid gap-3 md:grid-cols-[1.4fr_1fr_auto]">
             <label className="relative flex items-center">
               <Search className="absolute left-3 h-4 w-4 text-muted-foreground" />
               <input
@@ -150,15 +109,6 @@ function DeliverablesPage() {
               ]}
             />
 
-            <Select
-              value={status}
-              onChange={(v) => setStatus(v as DeliverableStatus | "all")}
-              options={[
-                { value: "all", label: "Any status" },
-                ...STATUSES.map((s) => ({ value: s, label: s })),
-              ]}
-            />
-
             <button
               onClick={clearAll}
               disabled={!query && activeFilters === 0}
@@ -172,7 +122,11 @@ function DeliverablesPage() {
             <div className="inline-flex items-center gap-2">
               <Filter className="h-3.5 w-3.5" />
               {filtered.length} of {DELIVERABLES.length} deliverables
-              {activeFilters > 0 && <span>· {activeFilters} active filter{activeFilters > 1 ? "s" : ""}</span>}
+              {activeFilters > 0 && (
+                <span>
+                  · {activeFilters} active filter{activeFilters > 1 ? "s" : ""}
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -209,24 +163,15 @@ function DeliverablesPage() {
                         <div className="text-[11px] font-mono uppercase tracking-wider text-teal">
                           {d.type} · {tMeta.name}
                         </div>
-                        <div className="font-mono text-[11px] text-muted-foreground">
-                          {d.code}
-                        </div>
+                        <div className="font-mono text-[11px] text-muted-foreground">{d.code}</div>
                       </div>
                     </div>
-                    <span
-                      className={`shrink-0 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${statusClasses(d.status)}`}
-                    >
-                      {d.status}
-                    </span>
                   </div>
 
-                  <h3 className="mt-4 text-lg font-semibold leading-snug text-foreground">
+                  <h3 className="mt-4 text-lg font-normal leading-snug text-foreground">
                     {d.title}
                   </h3>
-                  <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">
-                    {d.abstract}
-                  </p>
+                  <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{d.abstract}</p>
 
                   <dl className="mt-4 grid grid-cols-2 gap-y-2 text-xs">
                     <dt className="text-muted-foreground">Project</dt>
@@ -242,20 +187,24 @@ function DeliverablesPage() {
                     </dd>
 
                     <dt className="text-muted-foreground">Version</dt>
-                    <dd className="text-right text-foreground/90">v{d.version} · {d.pages} pp.</dd>
+                    <dd className="text-right text-foreground/90">v{d.version}</dd>
 
                     <dt className="text-muted-foreground">Authors</dt>
-                    <dd className="truncate text-right text-foreground/90" title={d.authors.join(", ")}>
+                    <dd
+                      className="truncate text-right text-foreground/90"
+                      title={d.authors.join(", ")}
+                    >
                       {d.authors.join(", ")}
                     </dd>
                   </dl>
 
                   <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
-                    <button className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition hover:text-teal">
-                      View details <ArrowUpRight className="h-3.5 w-3.5" />
-                    </button>
-                    <button className="inline-flex items-center gap-1.5 rounded-full bg-teal px-3.5 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90">
-                      <Download className="h-3.5 w-3.5" /> PDF
+                    <button
+                      type="button"
+                      onClick={() => window.open(d.downloadUrl, "_blank", "noopener,noreferrer")}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-teal px-3.5 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90"
+                    >
+                      <Download className="h-3.5 w-3.5" /> <span className="text-sm">{getDownloadLabel(d.downloadUrl)}</span>
                     </button>
                   </div>
                 </li>
@@ -264,10 +213,16 @@ function DeliverablesPage() {
           </ul>
         )}
       </section>
-
-      <Footer />
     </div>
   );
+}
+
+function getDownloadLabel(url: string) {
+  const clean = url.split(/[?#]/)[0] ?? "";
+  const fileName = clean.split("/").pop() ?? "";
+  const extension = fileName.includes(".") ? (fileName.split(".").pop() ?? "") : "";
+  const upper = extension.toUpperCase();
+  return upper ? `Download ${upper}` : "Download file";
 }
 
 function chipClass(active: boolean) {
@@ -303,7 +258,10 @@ function Select({
       </select>
       <svg
         className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-        viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6"
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
       >
         <path d="M5 8l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -311,74 +269,19 @@ function Select({
   );
 }
 
-function Header() {
-  return (
-    <header className="border-b border-teal/40">
-      <div className="border-b border-white/5">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-          <a href="https://www.esa.int" className="hover:text-teal" target="_blank" rel="noreferrer">
-            → The European Space Agency
-          </a>
-          <span className="font-semibold tracking-[0.2em] text-foreground/90">ESA</span>
-        </div>
-      </div>
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-5">
-        <a href="/" className="flex items-baseline gap-3">
-          <span className="text-2xl font-semibold tracking-tight text-foreground">
-            AP<span className="text-teal">Ex</span>
-          </span>
-          <span className="hidden text-xs text-muted-foreground sm:inline">
-            Application Propagation Environments
-          </span>
-        </a>
-        <nav className="hidden items-center gap-7 text-sm text-foreground/85 md:flex">
-          <a href="https://apex.esa.int/algorithm-support" className="hover:text-teal" target="_blank" rel="noreferrer">Algorithm Support</a>
-          <a href="https://apex.esa.int" className="hover:text-teal" target="_blank" rel="noreferrer">Project Environments</a>
-          <span className="text-teal">Deliverables</span>
-          <a href="https://apex.esa.int" className="hover:text-teal" target="_blank" rel="noreferrer">Community</a>
-        </nav>
-        <a
-          href="mailto:apex@esa.int"
-          className="inline-flex items-center gap-2 rounded-full bg-teal px-4 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-        >
-          Contact us →
-        </a>
-      </div>
-    </header>
-  );
-}
-
 function Hero({ total }: { total: number }) {
   return (
-    <section className="hero-radial relative overflow-hidden">
+    <section className="relative overflow-hidden">
       <div className="bg-grid-faint absolute inset-0 opacity-60" aria-hidden />
       <div className="relative mx-auto max-w-7xl px-6 py-20 md:py-28">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-teal/30 bg-teal/10 px-3 py-1 text-xs uppercase tracking-[0.18em] text-teal">
-            Deliverables Library
-          </div>
-          <h1 className="mt-6 text-4xl font-semibold leading-tight tracking-tight md:text-6xl">
-            Every document, from every <span className="text-teal">APEx project</span>.
+          <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
+            APEx Document Repository
           </h1>
-          <p className="mt-5 max-w-2xl text-base text-foreground/80 md:text-lg">
-            Browse {total} document deliverables produced by ESA Earth Observation
-            activities — management plans, ATBDs, design documents, validation reports
-            and final reports — filterable by type, project and status.
+          <p className="my-5 max-w-2xl text-base text-foreground/80 md:text-lg">
+            Browse {total} document deliverables produced by ESA Earth Observation projects,
+            filterable by type, project and status.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#results" className="inline-flex items-center gap-2 rounded-full bg-teal px-5 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90">
-              Browse documents →
-            </a>
-            <a
-              href="https://apex.esa.int"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm text-foreground/90 hover:border-teal/60 hover:text-teal"
-            >
-              About APEx
-            </a>
-          </div>
-
           <dl className="mt-12 grid max-w-xl grid-cols-3 gap-6">
             <Stat label="Deliverables" value={total.toString()} />
             <Stat label="Projects" value={PROJECTS.length.toString()} />
@@ -393,26 +296,8 @@ function Hero({ total }: { total: number }) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="text-3xl font-semibold text-teal">{value}</div>
+      <div className="text-3xl font-normal text-teal">{value}</div>
       <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
     </div>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-white/10 bg-background">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-10 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-baseline gap-3">
-          <span className="text-lg font-semibold">AP<span className="text-teal">Ex</span></span>
-          <span className="text-xs text-muted-foreground">
-            Application Propagation Environments · ESA Earth Observation
-          </span>
-        </div>
-        <div className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} European Space Agency. Deliverables shown for demonstration purposes.
-        </div>
-      </div>
-    </footer>
   );
 }

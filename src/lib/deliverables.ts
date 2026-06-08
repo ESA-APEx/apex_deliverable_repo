@@ -1,19 +1,10 @@
 import yaml from "js-yaml";
 import deliverablesYaml from "@/data/deliverables.yaml?raw";
 
-export type DeliverableType =
-  | "PM"
-  | "TN"
-  | "RB"
-  | "ADD"
-  | "DDD"
-  | "ATBD"
-  | "PVR"
-  | "DPM"
-  | "FR";
+export type DeliverableType = string;
 
 export interface DeliverableTypeMeta {
-  code: DeliverableType;
+  code: string;
   name: string;
   description: string;
 }
@@ -26,18 +17,15 @@ export interface Project {
   lead: string;
 }
 
-export type DeliverableStatus = "Draft" | "Issued" | "Accepted" | "Superseded";
-
 export interface Deliverable {
   id: string;
   code: string;
   title: string;
-  type: DeliverableType;
+  type: string;
   projectId: string;
   version: string;
   issuedOn: string; // ISO date
-  status: DeliverableStatus;
-  pages: number;
+  downloadUrl: string;
   authors: string[];
   abstract: string;
 }
@@ -67,6 +55,6 @@ export function getProject(id: string) {
   return PROJECTS.find((p) => p.id === id);
 }
 
-export function getType(code: DeliverableType) {
+export function getType(code: string) {
   return DELIVERABLE_TYPES.find((t) => t.code === code);
 }

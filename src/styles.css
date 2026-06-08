@@ -1,6 +1,51 @@
+/* Declare apex-shell before tailwindcss so it sits below all Tailwind layers
+   in the cascade. Bootstrap styles injected from the live APEx header/footer
+   will therefore never override Tailwind utility classes. */
+@layer apex-shell;
+
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+
+/* NotesEsa — served locally (public/fonts/) to avoid CORS block on apex.esa.int.
+   All four cuts are registered under the same family so the browser never
+   synthesises bold/italic. */
+@font-face {
+  font-family: "NotesEsa";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url("/fonts/NotesEsa.woff2") format("woff2"),
+    url("/fonts/NotesEsa.woff") format("woff");
+}
+@font-face {
+  font-family: "NotesEsa";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url("/fonts/NotesEsa-Italic.woff2") format("woff2"),
+    url("/fonts/NotesEsa-Italic.woff") format("woff");
+}
+@font-face {
+  font-family: "NotesEsa";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    url("/fonts/NotesEsa-Bold.woff2") format("woff2"),
+    url("/fonts/NotesEsa-Bold.woff") format("woff");
+}
+@font-face {
+  font-family: "NotesEsa";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    url("/fonts/NotesEsa-BoldItalic.woff2") format("woff2"),
+    url("/fonts/NotesEsa-BoldItalic.woff") format("woff");
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -35,43 +80,46 @@
   --color-teal-soft: var(--teal-soft);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-sans: "NotesEsa", "Segoe UI", system-ui, -apple-system, sans-serif;
+
 }
 
 :root {
   --radius: 0.75rem;
 
-  /* APEx palette — deep teal/navy with bright teal accent */
-  --background: oklch(0.22 0.04 200);          /* deep teal navy */
-  --foreground: oklch(0.97 0.01 200);
-  --surface: oklch(0.27 0.045 200);             /* card surface */
-  --surface-2: oklch(0.32 0.05 200);
-  --card: oklch(0.27 0.045 200);
-  --card-foreground: oklch(0.97 0.01 200);
-  --popover: oklch(0.27 0.045 200);
-  --popover-foreground: oklch(0.97 0.01 200);
+  /* Aligned to apex.esa.int: deep blue-teal base with APEx cyan-teal accent. */
+  --background: #043346;
+  --foreground: #f4fbff;
+  --surface: #0d4258;
+  --surface-2: #14506a;
+  --card: #0d4258;
+  --card-foreground: #f4fbff;
+  --popover: #0d4258;
+  --popover-foreground: #f4fbff;
 
-  --teal: oklch(0.75 0.13 185);                 /* bright APEx teal */
-  --teal-soft: oklch(0.55 0.09 185);
+  --teal: #00ae9d;
+  --teal-soft: #2cc6b7;
 
-  --primary: oklch(0.75 0.13 185);
-  --primary-foreground: oklch(0.18 0.04 200);
-  --secondary: oklch(0.32 0.05 200);
-  --secondary-foreground: oklch(0.97 0.01 200);
-  --muted: oklch(0.32 0.04 200);
-  --muted-foreground: oklch(0.78 0.02 200);
-  --accent: oklch(0.75 0.13 185);
-  --accent-foreground: oklch(0.18 0.04 200);
-  --destructive: oklch(0.62 0.22 25);
-  --destructive-foreground: oklch(0.98 0.01 200);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 10%);
-  --ring: oklch(0.75 0.13 185);
+  --primary: #00ae9d;
+  --primary-foreground: #032c3a;
+  --secondary: #14506a;
+  --secondary-foreground: #f4fbff;
+  --muted: #1a5a74;
+  --muted-foreground: #bfd4de;
+  --accent: #00ae9d;
+  --accent-foreground: #032c3a;
+  --destructive: #dc4a5a;
+  --destructive-foreground: #fff8f8;
+  --border: rgb(255 255 255 / 16%);
+  --input: rgb(255 255 255 / 14%);
+  --ring: #00ae9d;
+
+  --bs-border-color: var(--border) !important;
 }
 
 .dark {
-  --background: oklch(0.22 0.04 200);
-  --foreground: oklch(0.97 0.01 200);
+  --background: #043346;
+  --foreground: #f4fbff;
 }
 
 @layer base {
@@ -83,19 +131,25 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: auto;
   }
 }
 
-@utility bg-grid-faint {
-  background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--teal) 6%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--teal) 6%, transparent) 1px, transparent 1px);
-  background-size: 56px 56px;
+ul {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+button {
+  border-radius: 9999px !important;
+}
+
+label {
+  display: flex !important;
 }
 
 @utility hero-radial {
   background:
-    radial-gradient(ellipse 60% 50% at 50% 0%, color-mix(in oklab, var(--teal) 22%, transparent), transparent 70%),
+    radial-gradient(ellipse 60% 100% at 100% 50%, color-mix(in srgb, var(--teal) 28%, transparent), transparent 70%),
     var(--color-background);
 }
